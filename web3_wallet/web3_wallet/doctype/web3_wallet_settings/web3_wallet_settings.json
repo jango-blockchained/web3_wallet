@@ -1,0 +1,54 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-07-03 16:53:25.385839",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enable_wallet_login",
+  "enable_wallet_reg",
+  "infura_api_key"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "enable_wallet_login",
+   "fieldtype": "Check",
+   "label": "Enable Wallet Sign In"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_wallet_reg",
+   "fieldtype": "Check",
+   "label": "Enable Wallet Sign Up"
+  },
+  {
+   "fieldname": "infura_api_key",
+   "fieldtype": "Data",
+   "label": "Infura API Key"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-07-03 17:02:56.429605",
+ "modified_by": "Administrator",
+ "module": "Web3 Wallet",
+ "name": "Web3 Wallet Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
