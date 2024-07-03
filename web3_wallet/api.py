@@ -1,31 +1,34 @@
 import frappe
 from web3 import Web3
+from eth_account.messages import encode_defunct
 
 @frappe.whitelist()
 def link_wallet_to_user(user_email, wallet_address, signature, message):
-    settings = frappe.get_single("Web3 Wallet Settings")
     # Check if the user exists
     user = frappe.get_doc("User", {"email": user_email})
     if not user:
         frappe.throw("User not found")
 
     # Check if the wallet is already linked to a user
-    existing_wallet = frappe.get_value("Web3 Wallet Account Link", {"address": wallet_address})
+    existing_wallet = frappe.get_value("Web3 Wallet Account Link", {"wallet_address": wallet_address})
     if existing_wallet:
         frappe.throw("This wallet is already linked to a user")
 
     # Connect to Ethereum node
     web3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID'))
 
+    # Encode the message
+    encoded_message = encode_defunct(text=message)
+
     # Recover the address from the signature
-    recovered_address = web3.eth.account.recover_message(message, signature=signature)
+    recovered_address = web3.eth.account.recover_message(encoded_message, signature=signature)
     
     if recovered_address.lower() == wallet_address.lower():
         # Link the wallet to the user
         wallet = frappe.get_doc({
-            "doctype": "Web3 Wallet",
+            "doctype": "Web3 Wallet Account Link",
             "user": user_email,
-            "address": wallet_address
+            "wallet_address": wallet_address
         })
         wallet.insert()
 
@@ -33,12 +36,11 @@ def link_wallet_to_user(user_email, wallet_address, signature, message):
     else:
         frappe.throw("Signature verification failed")
 
-    return {"status": "success", "message": "Wallet linked successfully"}
 
 @frappe.whitelist(allow_guest=True)
-def login_with_wallet(address, signature, message):
+def login_with_wallet(wallet_address, signature, message):
     # Check if wallet login is enabled
-    settings = frappe.get_single("Web3 Settings")
+    settings = frappe.get_single("Web3 Wallet Settings")
     if not settings.enable_wallet_login:
         frappe.throw("Wallet login is disabled")
 
@@ -48,9 +50,9 @@ def login_with_wallet(address, signature, message):
     # Recover the address from the signature
     recovered_address = web3.eth.account.recover_message(message, signature=signature)
     
-    if recovered_address.lower() == address.lower():
+    if recovered_address.lower() == wallet_address.lower():
         # Find the user linked to the wallet address
-        user_email = frappe.get_value("Web3 Wallet Account Link", {"address": address}, "user")
+        user_email = frappe.get_value("Web3 Wallet Account Link", {"wallet_address": wallet_address}, "user")
         if not user_email:
             frappe.throw("No user linked to this wallet")
 
