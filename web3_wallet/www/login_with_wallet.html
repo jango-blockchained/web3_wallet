@@ -4,6 +4,7 @@
     <title>Login with Wallet</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.6/web3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/assets/js/frappe.min.js"></script> <!-- Adjust path as necessary -->
 </head>
 <body>
     <h1>Login with Ethereum Wallet</h1>
@@ -25,19 +26,22 @@
                 const signature = await web3.eth.personal.sign(message, account);
 
                 // Send the address, signature, and message to the server for verification
-                $.ajax({
-                    method: 'POST',
-                    url: '/api/method/web3_wallet_app.api.login_with_wallet',
-                    data: {
-                        address: account,
+                frappe.call({
+                    method: 'web3_wallet.api.login_with_wallet',
+                    args: {
+                        wallet_address: account,
                         signature: signature,
                         message: message
                     },
-                    success: function(response) {
-                        $('#login-status').html('<p>Login successful! Welcome, ' + response.message.user + '</p>');
+                    callback: function(response) {
+                        if (response.message.status === 'success') {
+                            $('#login-status').html('<p>Login successful! Welcome, ' + response.message.user + '</p>');
+                        } else {
+                            $('#login-status').html('<p>Login failed. ' + response.message.message + '</p>');
+                        }
                     },
                     error: function(error) {
-                        $('#login-status').html('<p>Login failed. ' + error.responseJSON.message + '</p>');
+                        $('#login-status').html('<p>Login failed. ' + error.message + '</p>');
                     }
                 });
             } else {
@@ -45,8 +49,8 @@
             }
         }
 
-        $('#login-button').on('click', function() {
-            loginWithMetaMask();
+        $('#login-button').on('click', async function() {
+            await loginWithMetaMask();
         });
     </script>
 </body>

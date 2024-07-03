@@ -44,26 +44,37 @@ def login_with_wallet(wallet_address, signature, message):
     if not settings.enable_wallet_login:
         frappe.throw("Wallet login is disabled")
 
-    # Connect to Ethereum node
+    # Connect to Ethereum node using Infura API
     web3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/' + settings.infura_api_key))
 
-    # Recover the address from the signature
-    recovered_address = web3.eth.account.recover_message(message, signature=signature)
-    
-    if recovered_address.lower() == wallet_address.lower():
-        # Find the user linked to the wallet address
-        user_email = frappe.get_value("Web3 Wallet Account Link", {"wallet_address": wallet_address}, "user")
-        if not user_email:
-            frappe.throw("No user linked to this wallet")
+    try:
+        # Hash the message using Keccak-256
+        hashed_message = web3.keccak(text=message).hex()
 
-        # Log the user in
-        frappe.local.login_manager.user = user_email
-        frappe.local.login_manager.post_login()
-        return {"status": "success", "user": user_email}
-    else:
-        frappe.throw("Signature verification failed")
+        # Recover the address from the signature
+        recovered_address = web3.eth.account.recover_message(hashed_message, signature=signature)
+        
+        # Compare recovered address with provided wallet address
+        if recovered_address.lower() == wallet_address.lower():
+            # Find the user linked to the wallet address
+            user_email = frappe.get_value("Web3 Wallet Account Link", {"wallet_address": wallet_address}, "user")
+            if not user_email:
+                frappe.throw("No user linked to this wallet")
 
-    return {"status": "failed"}
+            # Log the user in
+            frappe.local.login_manager.user = user_email
+            frappe.local.login_manager.post_login()
+            
+            return {"status": "success", "user": user_email}
+        else:
+            frappe.throw("Signature verification failed")
+
+    except Exception as e:
+        frappe.throw(f"Error during login: {str(e)}")
+
+    # Return failure message if any condition fails
+    return {"status": "failed", "message": "Login failed"}
+
 
 @frappe.whitelist(allow_guest=True)
 def get_wallet_login_status():

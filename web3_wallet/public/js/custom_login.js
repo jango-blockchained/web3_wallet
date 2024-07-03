@@ -1,6 +1,3 @@
-
-
-
 frappe.pages['login'].on_page_load = function(wrapper) {
     var page = frappe.ui.make_app_page({
         parent: wrapper,
@@ -29,7 +26,7 @@ frappe.pages['login'].on_page_load = function(wrapper) {
 
             $.ajax({
                 method: 'POST',
-                url: '/api/method/web3_wallet_app.api.login_with_wallet',
+                url: '/api/method/web3_wallet.api.login_with_wallet',
                 data: {
                     address: account,
                     signature: signature,
