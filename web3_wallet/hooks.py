@@ -12,20 +12,22 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/web3_wallet/css/web3_wallet.css"
 # app_include_js = "/assets/web3_wallet/js/web3_wallet.js"
-
+app_include_js = [
+    "/assets/web3_wallet/js/user_link_wallet.js"
+]
 # include js, css files in header of web template
 # web_include_css = "/assets/web3_wallet/css/web3_wallet.css"
 # web_include_js = "/assets/web3_wallet/js/web3_wallet.js"
-
+web_include_js = [
+    "/assets/web3_wallet/js/custom_login.js"
+]
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "web3_wallet/public/scss/website"
 
 # include js, css files in header of web form
 # webform_include_js = {"doctype": "public/js/doctype.js"}
 # webform_include_css = {"doctype": "public/css/doctype.css"}
-app_include_js = [
-    "/assets/web3_wallet/js/user_link_wallet.js"
-]
+
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
