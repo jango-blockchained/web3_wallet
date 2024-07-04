@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Web3 Wallet",
  "links": [],
- "modified": "2024-07-03 17:33:26.317519",
+ "modified": "2024-07-04 03:04:48.075323",
  "modified_by": "Administrator",
  "module": "Web3 Wallet",
  "name": "Web3 Wallet",
@@ -23,7 +23,7 @@
  "public": 1,
  "quick_lists": [],
  "roles": [],
- "sequence_id": 23.0,
+ "sequence_id": 10.0,
  "shortcuts": [
   {
    "color": "Grey",

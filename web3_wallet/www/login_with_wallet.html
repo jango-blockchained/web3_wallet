@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login with Wallet</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.6/web3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/assets/js/frappe.min.js"></script> <!-- Adjust path as necessary -->
-</head>
-<body>
+
     <h1>Login with Ethereum Wallet</h1>
     <button id="login-button">Login with MetaMask</button>
     <div id="login-status"></div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.6/web3.min.js"></script>
     <script>
         async function loginWithMetaMask() {
             if (window.ethereum) {
@@ -53,5 +45,3 @@
             await loginWithMetaMask();
         });
     </script>
-</body>
-</html>

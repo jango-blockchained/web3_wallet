@@ -4,6 +4,10 @@ from eth_account.messages import encode_defunct
 
 @frappe.whitelist()
 def link_wallet_to_user(user_email, wallet_address, signature, message):
+    settings = frappe.get_single("Web3 Wallet Settings")
+    if not settings.enable_wallet_login:
+        frappe.throw("Wallet login is disabled")
+
     # Check if the user exists
     user = frappe.get_doc("User", {"email": user_email})
     if not user:
@@ -12,10 +16,10 @@ def link_wallet_to_user(user_email, wallet_address, signature, message):
     # Check if the wallet is already linked to a user
     existing_wallet = frappe.get_value("Web3 Wallet Account Link", {"wallet_address": wallet_address})
     if existing_wallet:
-        frappe.throw("This wallet is already linked to a user")
+        frappe.throw("This wallet is already linked to another user.")
 
-    # Connect to Ethereum node
-    web3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID'))
+    # Connect to Ethereum node using Infura API
+    web3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/' + settings.infura_api_key))
 
     # Encode the message
     encoded_message = encode_defunct(text=message)
