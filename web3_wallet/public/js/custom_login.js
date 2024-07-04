@@ -8,7 +8,7 @@ frappe.pages['login'].on_page_load = function(wrapper) {
     $(frappe.render_template('login_ext')).appendTo(page.body);
 
     async function loginWithMetaMask() {
-        const response = await fetch('/api/method/web3_wallet_app.api.get_wallet_login_status');
+        const response = await fetch('/api/method/web3_wallet.api.get_wallet_login_status');
         const data = await response.json();
         if (!data.message.enable_wallet_login) {
             $('#login-status').html('<p>Wallet login is disabled.</p>');
@@ -44,8 +44,8 @@ frappe.pages['login'].on_page_load = function(wrapper) {
         }
     };
     // Handle Web3 Wallet login button click event
-    $('#web3-login-btn').on('click', function() {
+    $('#web3-login-btn').on('click', async function() {
         // Redirect or perform Web3 Wallet login action
-        loginWithMetaMask();
+        await loginWithMetaMask();
     });
 };
