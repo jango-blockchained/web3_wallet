@@ -12,15 +12,13 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/web3_wallet/css/web3_wallet.css"
 # app_include_js = "/assets/web3_wallet/js/web3_wallet.js"
-app_include_js = [
-    "/assets/web3_wallet/js/user_link_wallet.js"
-]
+# app_include_js = [
+#     "/assets/web3_wallet/js/user_link_wallet.js"
+# ]
 # include js, css files in header of web template
 # web_include_css = "/assets/web3_wallet/css/web3_wallet.css"
 # web_include_js = "/assets/web3_wallet/js/web3_wallet.js"
-web_include_js = [
-    "/assets/web3_wallet/js/custom_login.js"
-]
+web_include_js = ["/assets/web3_wallet/js/web3.min.js"]
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "web3_wallet/public/scss/website"
 
@@ -33,6 +31,7 @@ web_include_js = [
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
+doctype_js = {"User": ["public/js/web3.min.js", "public/js/user_link_wallet.js"]}
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -231,4 +230,3 @@ web_include_js = [
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-

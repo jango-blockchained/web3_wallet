@@ -9,10 +9,7 @@ frappe.ui.form.on('User', {
 });
 
 async function linkWallet(email) {
-    if (typeof Web3 === 'undefined') {
-        // Dynamically load the Web3 library
-        await loadWeb3Library();
-    }
+
     if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
         await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -41,14 +38,4 @@ async function linkWallet(email) {
     } else {
         frappe.msgprint("MetaMask not detected. Please install MetaMask and try again.");
     }
-}
-
-async function loadWeb3Library() {
-    return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.6/web3.min.js";
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error("Failed to load Web3 library"));
-        document.head.appendChild(script);
-    });
 }
