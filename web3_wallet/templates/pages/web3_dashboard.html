@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/thirdweb/2.0.0/thirdweb.min.js"></script>
+</head>
+<body>
+    <div id="dashboard">
+        <h1>Web3 Dashboard</h1>
+        <div id="wallet-address"></div>
+        <div id="token-balance"></div>
+        <div id="nft-holdings"></div>
+    </div>
+
+    <script>
+        const sdk = new thirdweb.ThirdwebSDK("rinkeby");
+
+        async function loadDashboard() {
+            const address = await sdk.connectWallet();
+            document.getElementById('wallet-address').innerText = `Wallet Address: ${address}`;
+            
+            // Fetch and display token balance
+            const balance = await sdk.wallet.balance();
+            document.getElementById('token-balance').innerText = `Token Balance: ${balance.displayValue}`;
+            
+            // Fetch and display NFTs (using an example NFT contract)
+            const nfts = await sdk.nft.getAllOwned();
+            document.getElementById('nft-holdings').innerText = `NFT Holdings: ${nfts.length}`;
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>

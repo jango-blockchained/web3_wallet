@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Chain Web3 Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/thirdweb/2.0.0/thirdweb.min.js"></script>
+</head>
+<body>
+    <div id="multi-chain-login">
+        <select id="network-select">
+            <option value="ethereum">Ethereum</option>
+            <option value="polygon">Polygon</option>
+            <option value="bsc">Binance Smart Chain</option>
+        </select>
+        <button id="connect-button">Connect Wallet</button>
+    </div>
+
+    <script>
+        const connectButton = document.getElementById('connect-button');
+        const networkSelect = document.getElementById('network-select');
+
+        connectButton.addEventListener('click', async () => {
+            const network = networkSelect.value;
+            const sdk = new thirdweb.ThirdwebSDK(network);
+            const address = await sdk.connectWallet();
+            
+            // Handle login with selected network and address
+            const response = await fetch('/api/method/web3_wallet.authenticate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ wallet_address: address, network: network })
+            });
+            const data = await response.json();
+            if (data.message === 'authenticated') {
+                window.location.href = '/';
+            } else {
+                alert('Login failed');
+            }
+        });
+    </script>
+</body>
+</html>

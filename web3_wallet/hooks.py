@@ -230,3 +230,12 @@ doctype_js = {"User": ["public/js/web3.min.js", "public/js/user_link_wallet.js"]
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+website_route_rules = [
+    {"from_route": "/login", "to_route": "web3_wallet"},
+    {"from_route": "/dashboard", "to_route": "web3_dashboard"},
+    {"from_route": "/multi-chain-login", "to_route": "web3_multi_chain_login"},
+]
+
+
+after_install = "web3_wallet.custom_fields.create_custom_fields"
+before_uninstall = "web3_wallet.custom_fields.remove_custom_fields"

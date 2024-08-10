@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/thirdweb/2.0.0/thirdweb.min.js"></script>
+</head>
+<body>
+    <div id="wallet-connect">
+        <button id="connect-button">Connect Wallet</button>
+    </div>
+
+    <script>
+        const sdk = new thirdweb.ThirdwebSDK("rinkeby"); // Use the appropriate network
+        const connectButton = document.getElementById('connect-button');
+
+        connectButton.addEventListener('click', async () => {
+            try {
+                const address = await sdk.connectWallet();
+                // POST to Frappe backend to authenticate the user
+                const response = await fetch('/api/method/web3_wallet.authenticate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ wallet_address: address })
+                });
+                const data = await response.json();
+                if (data.message === 'authenticated') {
+                    window.location.href = '/';
+                } else {
+                    alert('Login failed');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
